@@ -1,5 +1,6 @@
 package com.mini.miniServer.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,11 @@ public class CommonController {
 	@PostMapping("/save")
 	public DefaultResponse saveCommon(@RequestBody Common common) {  
 		return new DefaultResponse(commonService.save(common));
+	}
+	
+	@GetMapping("/list")
+	public DefaultResponse commonList( ) {  
+		return new DefaultResponse(commonService.findAll());
 	}
 	
 }

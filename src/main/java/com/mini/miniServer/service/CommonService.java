@@ -1,31 +1,29 @@
 package com.mini.miniServer.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
-import com.mini.miniServer.domain.Common;
-import com.mini.miniServer.dto.request.SaveCommonReq;
-import com.mini.miniServer.exception.DuplicateException;
-import com.mini.miniServer.repository.CommonRepository;
+import org.springframework.stereotype.Service; 
+
+import com.mini.miniServer.domain.Common; 
+import com.mini.miniServer.mapper.CommonMapper;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CommonService {
-
-	private final CommonRepository commonRepository;
-
-	@Transactional
-	public Common save(Common commonReq) {
-		String username = commonReq.getUsername();
-		int i = commonRepository.countByUsername(username);
-		if (i != 0) {
-			throw new DuplicateException("username이");
-		}
-		Common common = commonRepository.save(commonReq);
-		
+ 
+	private final CommonMapper commonMapper;
+ 
+	public int save(Common commonReq) {
+		  
+		int common = commonMapper.saveCommon(commonReq); 
 		return common;
+	}
+	
+	public List<Common> findAll(){
+		List<Common> commonList = commonMapper.findAllCommon();
+		return commonList;
 	}
 
 }
