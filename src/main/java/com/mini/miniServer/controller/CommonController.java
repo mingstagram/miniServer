@@ -4,10 +4,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mini.miniServer.domain.Common;
 import com.mini.miniServer.dto.DefaultResponse;
+import com.mini.miniServer.dto.request.FindCommonListReq;
 import com.mini.miniServer.dto.request.SaveCommonReq;
 import com.mini.miniServer.service.CommonService;
  
@@ -25,9 +27,9 @@ public class CommonController {
 		return new DefaultResponse(commonService.save(common));
 	}
 	
-	@GetMapping("/list")
-	public DefaultResponse commonList( ) {  
-		return new DefaultResponse(commonService.findAll());
+	@PostMapping("/list")
+	public DefaultResponse commonList(@RequestBody FindCommonListReq findCommonListReq) {  
+		return new DefaultResponse(commonService.findAll(findCommonListReq));
 	}
 	
 }

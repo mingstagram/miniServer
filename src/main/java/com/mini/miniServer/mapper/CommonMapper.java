@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;  
 
 import com.mini.miniServer.domain.Common;
+import com.mini.miniServer.dto.response.PageRes;
 
 @Mapper 
 public interface CommonMapper {
@@ -15,5 +16,7 @@ public interface CommonMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int saveCommon(Common common);
 	
-	List<Common> findAllCommon();
+	List<Common> findAllCommon(String username);
+	
+	PageRes<Common> findAllCommonCount(String username);
 }
