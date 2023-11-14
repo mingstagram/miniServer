@@ -23,10 +23,11 @@ public class CommonService {
 		return common;
 	}
 	
-	public PageRes<Common> findAll(FindCommonListReq findCommonListReq){
+	// 페이지 처리 
+	public PageRes<Common> findAll(FindCommonListReq findCommonListReq){  
 		List<Common> commonList = commonMapper.findAllCommon(findCommonListReq.getUsername());
-		PageRes<Common> commonListCount = commonMapper.findAllCommonCount(findCommonListReq.getUsername());
-		
+		PageRes<Common> commonListCount = commonMapper.findAllCommonCount(findCommonListReq.getUsername()); 
+		 
 		commonListCount.parse(findCommonListReq);
 		commonListCount.setList(commonList);
 		
