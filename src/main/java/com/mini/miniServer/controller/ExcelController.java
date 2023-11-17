@@ -6,11 +6,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mini.miniServer.domain.Common;
 import com.mini.miniServer.dto.DefaultResponse;
 import com.mini.miniServer.dto.request.FindCommonListReq;
 import com.mini.miniServer.dto.response.PageRes;
+import com.mini.miniServer.exception.ExcelFailedException;
+import com.mini.miniServer.exception.SelectFileException;
 import com.mini.miniServer.service.CommonService;
 import com.mini.miniServer.service.ExcelService;
 
@@ -29,16 +32,26 @@ public class ExcelController {
 	private final ExcelService excelService;
 
 	@GetMapping("/download")
-	public DefaultResponse excelDownload(HttpServletRequest request, HttpServletResponse response, @RequestParam FindCommonListReq findCommonListReq) throws Exception {
-		PageRes<Common> commonData = commonService.findAll(findCommonListReq); 
+	public DefaultResponse excelDownload(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		PageRes<Common> commonData = commonService.findAll();  
 		excelService.reqExcelDownload(request, response, commonData);
 		return new DefaultResponse();
 	}
 	
 	@PostMapping("/upload")
-	public DefaultResponse excelUpload(HttpServletRequest request, HttpServletResponse response) {
+	public DefaultResponse excelUpload(@RequestParam("file") MultipartFile file) {
 	
-		return new DefaultResponse();
+		if(!file.isEmpty()) {
+			try {
+				excelService.processExcelFile(file);
+				return new DefaultResponse();
+			} catch (Exception e) {
+				throw new ExcelFailedException();
+			}
+			 
+		} else {
+			throw new SelectFileException();
+		} 
 	}
 	
 }

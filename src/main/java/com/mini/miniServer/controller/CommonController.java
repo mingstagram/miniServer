@@ -27,9 +27,9 @@ public class CommonController {
 		return new DefaultResponse(commonService.save(common));
 	}
 	
-	@PostMapping("/list")
-	public DefaultResponse commonList(@RequestBody FindCommonListReq findCommonListReq) {  
-		return new DefaultResponse(commonService.findAll(findCommonListReq));
+	@GetMapping("/list")
+	public DefaultResponse commonList() {  
+		return new DefaultResponse(commonService.findAll());
 	}
 	
 }

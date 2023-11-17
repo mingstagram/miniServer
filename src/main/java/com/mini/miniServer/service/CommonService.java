@@ -17,18 +17,16 @@ public class CommonService {
  
 	private final CommonMapper commonMapper;
  
-	public int save(Common commonReq) {
-		  
+	public int save(Common commonReq) { 
 		int common = commonMapper.saveCommon(commonReq); 
 		return common;
 	}
 	
 	// 페이지 처리 
-	public PageRes<Common> findAll(FindCommonListReq findCommonListReq){  
-		List<Common> commonList = commonMapper.findAllCommon(findCommonListReq.getUsername());
-		PageRes<Common> commonListCount = commonMapper.findAllCommonCount(findCommonListReq.getUsername()); 
-		 
-		commonListCount.parse(findCommonListReq);
+	public PageRes<Common> findAll(){  
+		List<Common> commonList = commonMapper.findAllCommon();
+		PageRes<Common> commonListCount = commonMapper.findAllCommonCount(); 
+		  
 		commonListCount.setList(commonList);
 		
 		return commonListCount;

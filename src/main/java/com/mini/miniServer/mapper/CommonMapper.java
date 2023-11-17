@@ -16,7 +16,7 @@ public interface CommonMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int saveCommon(Common common);
 	
-	List<Common> findAllCommon(String username);
+	List<Common> findAllCommon();
 	
-	PageRes<Common> findAllCommonCount(String username);
+	PageRes<Common> findAllCommonCount();
 }

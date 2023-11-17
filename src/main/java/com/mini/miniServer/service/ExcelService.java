@@ -1,7 +1,10 @@
 package com.mini.miniServer.service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -15,8 +18,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mini.miniServer.domain.Common;
 import com.mini.miniServer.dto.response.PageRes;
@@ -95,7 +100,7 @@ public class ExcelService {
 			int cellIdx = 0; 
 			
 			Common vo = (Common) data.getList().get(i);
-			
+			System.out.println(">>> " + vo);
 			cell = row.createCell(cellIdx++);
 			cell.setCellValue(vo.getId());
 			cell.setCellStyle(dataStyle);
@@ -147,5 +152,41 @@ public class ExcelService {
 
 		return cellStyle;
 	}
+	
+	public void processExcelFile(MultipartFile file) { 
+		
+        try (InputStream inputStream = file.getInputStream()) {
+            Workbook workbook = WorkbookFactory.create(inputStream);
+            Sheet sheet = workbook.getSheetAt(0);
+
+            Iterator<Row> rowIterator = sheet.iterator();
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next(); 
+                Iterator<Cell> cellIterator = row.cellIterator();
+                while (cellIterator.hasNext()) {
+                    Cell cell = cellIterator.next();
+                    // 셀에서 데이터 추출
+                    switch (cell.getCellType()) {
+                        case STRING: 
+                            System.out.print(cell.getStringCellValue() + "\t");
+                            break;
+                        case NUMERIC:
+                            System.out.print((int)cell.getNumericCellValue() + "\t");
+                            break;
+                        case BOOLEAN:
+                            System.out.print(cell.getBooleanCellValue() + "\t");
+                            break;
+                        default:
+                            System.out.print("\t");
+                    }
+                }
+                System.out.println(); // 다음 행으로 이동
+            }
+
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
