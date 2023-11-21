@@ -46,6 +46,7 @@ public class ExcelController {
 				excelService.processExcelFile(file);
 				return new DefaultResponse();
 			} catch (Exception e) {
+				System.out.println(e.getMessage());
 				throw new ExcelFailedException();
 			}
 			 
